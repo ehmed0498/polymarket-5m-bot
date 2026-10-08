@@ -1,0 +1,32 @@
+name: Polymarket Paper Bot
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Extract bot
+        run: |
+          unzip -o polymarket_5m_bot.zip -d bot
+
+      - name: Install dependencies
+        working-directory: bot
+        run: |
+          pip install -r requirements.txt
+
+      - name: Start paper bot
+        working-directory: bot
+        run: |
+          python main.py
