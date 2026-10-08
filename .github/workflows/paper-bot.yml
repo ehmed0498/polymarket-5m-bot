@@ -1,3 +1,4 @@
+
 name: Polymarket Paper Bot
 
 on:
@@ -25,6 +26,53 @@ jobs:
         working-directory: bot/polymarket_5m_bot
         run: |
           pip install -r requirements.txt
+
+      - name: Test Polymarket API
+        run: |
+          python - <<'PY'
+          import urllib.request
+          import time
+
+          base = "https://gamma-api.polymarket.com"
+
+          print("===== POLYMARKET API TEST =====")
+
+          for path in [
+              "/events?active=true&closed=false&limit=5",
+              "/markets?active=true&closed=false&limit=5"
+          ]:
+              url = base + path
+              print("\nGET:", url)
+              try:
+                  with urllib.request.urlopen(url, timeout=20) as r:
+                      data = r.read().decode()
+                      print("STATUS:", r.status)
+                      print(data[:5000])
+              except Exception as e:
+                  print("ERROR:", repr(e))
+
+          now = int(time.time())
+          base_time = (now // 300) * 300
+
+          print("\n===== BTC 5-MINUTE TEST =====")
+
+          for i in [-2, -1, 0, 1, 2]:
+              timestamp = base_time + (i * 300)
+              slug = f"btc-updown-5m-{timestamp}"
+              url = f"{base}/events/slug/{slug}"
+
+              print("\nSLUG:", slug)
+
+              try:
+                  with urllib.request.urlopen(url, timeout=20) as r:
+                      data = r.read().decode()
+                      print("STATUS:", r.status)
+                      print(data[:3000])
+              except Exception as e:
+                  print("ERROR:", repr(e))
+
+          print("\n===== TEST COMPLETE =====")
+          PY
 
       - name: Start paper bot
         working-directory: bot/polymarket_5m_bot
