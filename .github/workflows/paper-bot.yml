@@ -22,11 +22,11 @@ jobs:
           unzip -o polymarket_5m_bot.zip -d bot
 
       - name: Install dependencies
-        working-directory: bot
+        working-directory: bot/polymarket_5m_bot
         run: |
           pip install -r requirements.txt
 
       - name: Start paper bot
-        working-directory: bot
+        working-directory: bot/polymarket_5m_bot
         run: |
           python main.py
