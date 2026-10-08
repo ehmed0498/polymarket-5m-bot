@@ -77,4 +77,4 @@ jobs:
       - name: Start paper bot
         working-directory: bot/polymarket_5m_bot
         run: |
-          python main.py
+          python -u main.py
