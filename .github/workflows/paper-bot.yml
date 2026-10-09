@@ -20,7 +20,7 @@ jobs:
 
       - name: Extract bot
         run: |
-          unzip -o polymarket_5m_bot_final_fix_404_fixed.zip -d bot
+          unzip -o polymarket_paper_bot_v2_auto_discover.zip -d bot
 
       - name: Install dependencies
         working-directory: bot/polymarket_5m_bot
